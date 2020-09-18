@@ -5,15 +5,20 @@ const cors = require('./middleware/cors');
 const PORT =config.get('serverPort');
 const mainRouter = require('./routes/main');
 const secureRouter = require('./routes/secure');
+const passport = require('passport');
+const cookieParser = require('cookie-parser');
 
 
 const app = express();
 
 app.use(cors);
 app.use(express.json());
+app.use(cookieParser());
+require('./auth/auth');
 
 app.use('/api', mainRouter);
-app.use('/api', secureRouter);
+// app.use('/api', secureRouter);
+app.use('/api', passport.authenticate('jwt', {session:false}), secureRouter);
 
 app.use((req, res, next)=>{
     res.status(404).json({message: '404 - Notfound'});

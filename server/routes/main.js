@@ -1,26 +1,23 @@
 const express = require('express');
 const router = express.Router();
-const userAPIController = require('../controller/userAPIController');
-const authToken = require('../middleware/authToken');
+const  userAPIControllerWithPassport = require('../controller/userAPIControllerWithPassport')
+const passport = require('passport');
+const jwt = require('jsonwebtoken');
+const tokenList = {};
+
 
 router.get('/status', (req, res, next) => {
     res.status(200).json({ 'status': 'ok' });
 });
 
-router.post('/signup', userAPIController.signup);
+router.post('/signup', passport.authenticate('signup',{ session: false }), userAPIControllerWithPassport.signup);
 
-router.post('/login', userAPIController.login);
-router.get('/login', authToken, userAPIController.auth);
 
-router.post('/logout', (req, res, next) => {
-    res.status(200);
-    res.json({ 'status': 'ok' });
-});
+router.post('/login', userAPIControllerWithPassport.login);
 
-router.post('/token', (req, res, next) => {
-    res.status(200);
-    res.json({ 'status': 'ok' });
-});
+router.post('/logout', userAPIControllerWithPassport.logout);
+
+router.post('/token', userAPIControllerWithPassport.token);
 
 
 module.exports = router;
