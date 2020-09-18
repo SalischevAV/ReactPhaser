@@ -1,13 +1,11 @@
 const express = require('express');
 const router = express.Router();
+const authToken = require('../middleware/authToken');
+const scoreAPIController = require('../controller/scoreAPIController');
 
 
-router.post('/submit-score', (req, res, next)=>{
-    res.status(200).json({ 'status': 'ok' });
-});
+router.post('/submit-score', authToken, scoreAPIController.submitScore);
 
-router.get('/score', (req, res, next)=>{
-    res.status(200).json({ 'status': 'ok' });
-});
+router.get('/scores', authToken, scoreAPIController.scores);
 
 module.exports = router;

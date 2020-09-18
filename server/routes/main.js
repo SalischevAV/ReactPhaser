@@ -1,17 +1,16 @@
 const express = require('express');
 const router = express.Router();
+const userAPIController = require('../controller/userAPIController');
+const authToken = require('../middleware/authToken');
 
 router.get('/status', (req, res, next) => {
     res.status(200).json({ 'status': 'ok' });
 });
 
-router.post('/signup', (req, res, next) => {
-    res.status(200).json({ 'status': 'ok' });
-});
+router.post('/signup', userAPIController.signup);
 
-router.post('/login', (req, res, next) => {
-    res.status(200).json({ 'status': 'ok' });
-});
+router.post('/login', userAPIController.login);
+router.get('/login', authToken, userAPIController.auth);
 
 router.post('/logout', (req, res, next) => {
     res.status(200);
