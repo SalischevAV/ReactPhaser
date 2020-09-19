@@ -1,0 +1,14 @@
+@import 'colors';
+
+.game {
+    display: flex;
+    flex-direction: column;
+    width: 800px;
+    height: 600;
+    align-items: center;
+    background-color: white;
+    border-radius: 20px;
+    padding: 30px;
+    align-self: center;
+    margin-top: 100px;
+}

@@ -1,18 +1,18 @@
 import Phaser from "phaser";
-import logoImg from "./assets/logo.png";
+import logoImg from "../public/assets/logo.png";
 
 const config = {
   type: Phaser.AUTO,
   parent: "phaser-example",
-  width: 800,
-  height: 600,
+  width: '100%',
+  height: '100%',
   scene: {
     preload: preload,
     create: create
-  }
+  },
+  id: 'qwe'
 };
 
-const game = new Phaser.Game(config);
 
 function preload() {
   this.load.image("logo", logoImg);
@@ -30,3 +30,6 @@ function create() {
     loop: -1
   });
 }
+
+const game = new Phaser.Game(config);
+export default game;
