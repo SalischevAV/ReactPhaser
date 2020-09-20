@@ -37,7 +37,7 @@ async function start(){
         },()=>{
             console.log('Mongoose connect to db: '+ config.get('dbName'));
         });
-        mongoose.set('debug', true)
+        // mongoose.set('debug', true)
         app.listen(PORT, ()=>{
             console.log('Server running at port ', PORT)
         })

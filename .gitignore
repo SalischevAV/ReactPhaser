@@ -13,3 +13,5 @@ config
 # Build
 dist/
 /npm-debug.log
+
+.env

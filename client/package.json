@@ -37,7 +37,13 @@
   "dependencies": {
     "@ion-phaser/core": "^1.2.3",
     "@ion-phaser/react": "^1.2.2",
+    "axios": "^0.20.0",
     "babel-preset-react": "^6.24.1",
-    "phaser": "^3.20.1"
+    "phaser": "^3.20.1",
+    "react-dom": "^16.13.1",
+    "react-redux": "^7.2.1",
+    "redux": "^4.0.5",
+    "redux-devtools-extension": "^2.13.8",
+    "redux-thunk": "^2.3.0"
   }
 }

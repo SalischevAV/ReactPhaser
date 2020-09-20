@@ -2,12 +2,13 @@ const passport = require('passport');
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const config = require('config');
+const GameUser = require('../model/GameUser')
 
 const tokenList = {};
 const router = express.Router();
 
 module.exports.signup = async (req, res, next) => {
-    res.status(200).json({ message: 'signup successful' });
+    res.status(200).json({ message: 'signup successfull' });
 }
 
 module.exports.login = async (req, res, next) => {
@@ -38,7 +39,7 @@ module.exports.login = async (req, res, next) => {
                     _id: user._id
                 }
 
-                return res.status(200).json({ token, refreshToken });
+                return res.status(200).json({ token, refreshToken, user });
             })
         } catch (err) {
             return next(err);
@@ -46,17 +47,19 @@ module.exports.login = async (req, res, next) => {
     })(req, res, next)
 }
 
-module.exports.token = (req, res)=>{
+module.exports.token = async (req, res)=>{
     const {email, refreshToken} = req.body;
 
     if((refreshToken in tokenList)&&(tokenList[refreshToken].email===email)){
         const body = {email, _id:tokenList[refreshToken]._id};
         const token = jwt.sign({user: body}, config.get('secretKey'), {expiresIn: 300});
+        const decoded = jwt.verify(refreshToken, config.get('refreshKey'));
+        const user = await GameUser.findById(decoded.user._id);
 
-        res.cookie('jwt', token);
+        res.cookie('token', token);
         tokenList[refreshToken].token = token;
 
-        res.status(200).json({token});
+        res.status(200).json({token, user});
     } else{
         res.status(401).json({ message: 'Unauthorized' });
     }

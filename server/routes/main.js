@@ -15,7 +15,7 @@ router.post('/signup', passport.authenticate('signup',{ session: false }), userA
 
 router.post('/login', userAPIControllerWithPassport.login);
 
-router.post('/logout', userAPIControllerWithPassport.logout);
+router.get('/logout', userAPIControllerWithPassport.logout);
 
 router.post('/token', userAPIControllerWithPassport.token);
 

@@ -5,6 +5,7 @@ const GameUser = require('../model/GameUser');
 const bcrypt = require('bcrypt');
 const config = require('config');
 
+
 passport.use('signup', new localStrtegy({
     usernameField: 'email',
     passwordField: 'password',
@@ -12,7 +13,7 @@ passport.use('signup', new localStrtegy({
 }, async (req, email, password, done) => {
     try {
         const { name, password } = req.body;
-        const hashPassword =await bcrypt.hash(password, 8);
+        const hashPassword =await bcrypt.hash(password, 8);       
         const user = await GameUser.create({ email, password: hashPassword, name });
         return done(null, user);
     } catch (err) {
@@ -25,11 +26,12 @@ passport.use('login', new localStrtegy({
     passwordField: 'password'
 }, async (email, password, done) => {
     try {
-        const user = await GameUser.findOne({ email });
+        const user = await GameUser.findOne({ email:email });
         if (!user) {
             return done(null, false, { message: 'User not found' });
         }
         const validate = bcrypt.compareSync(password, user.password);
+        
         if (!validate) {
             return done(null, false, { message: 'Incorrect password' });
         }
