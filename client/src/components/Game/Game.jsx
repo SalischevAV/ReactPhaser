@@ -1,17 +1,13 @@
-import React from "react";
-import Phaser from "phaser";
+import React, {useEffect} from "react";
 import { IonPhaser } from "@ion-phaser/react";
-import logoImg from "../../assets/img/logo.png";
-// import {game} from '../../game';
-import FinalScene from "../../game/FinalScene";
-import GameScene from "../../game/GameScene";
-import StartScene from "../../game/StartScene";
+import {game} from '../../game';
 
-const Game = () => {
+
+function Game(){
   return (
     <div className="game">
 
-      <IonPhaser game={game} />
+      {/* <IonPhaser game={game} /> */}
     </div>
   );
 };
@@ -19,33 +15,33 @@ const Game = () => {
 export default Game;
 
 
-const game = {
-  type: Phaser.AUTO,
-  parent: "phaser-example",
-  width: "100%",
-  height: "100%",
-  scene: {
-    preload: preload,
-    create: create,    
-  },
-};
+// const game = {
+//   type: Phaser.AUTO,
+//   parent: "phaser-example",
+//   width: "100%",
+//   height: "100%",
+//   scene: {
+//     preload: preload,
+//     create: create,    
+//   },
+// };
 
 
 
 
-function preload() {
-  this.load.image("logo", logoImg);
-}
+// function preload() {
+//   this.load.image("logo", logoImg);
+// }
 
-function create() {
-  const logo = this.add.image(400, 150, "logo");
+// function create() {
+//   const logo = this.add.image(400, 150, "logo");
 
-  this.tweens.add({
-    targets: logo,
-    y: 450,
-    duration: 2000,
-    ease: "Power2",
-    yoyo: true,
-    loop: -1
-  });
-}
+//   this.tweens.add({
+//     targets: logo,
+//     y: 450,
+//     duration: 2000,
+//     ease: "Power2",
+//     yoyo: true,
+//     loop: -1
+//   });
+// }

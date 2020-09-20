@@ -1,4 +1,4 @@
-export default function getCookie(cname) {
+export  function getCookie(cname) {
   var name = cname + "=";
   var decodedCookie = decodeURIComponent(document.cookie);
   var ca = decodedCookie.split(';');
@@ -14,3 +14,10 @@ export default function getCookie(cname) {
   return "";
 }
 
+export function deleteCookie(name) {
+  
+  let deletedCookie = getCookie(cname)
+  deletedCookie(name, "", {
+    'max-age': -1
+  })
+}

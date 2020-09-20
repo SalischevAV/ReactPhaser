@@ -3,8 +3,7 @@ import axios from 'axios';
 import SERVER from '../SERVER';
 import { showAlert } from './appActions';
 import setCookie from '../../utils/setCookie';
-import getCookie from '../../utils/getCookie';
-import deleteCookie from '../../utils/deleteCookie';
+import {getCookie,deleteCookie}  from '../../utils/getCookie';
 import regeneratorRuntime from "regenerator-runtime";
 
 
@@ -35,7 +34,9 @@ export function login(email, password) {
                 })
                 setCookie('token', res.data.token);
                 setCookie('refreshToken', res.data.refreshToken);
-                localStorage.setItem('currenUser', res.data.user);
+                localStorage.setItem('currenUser', res.data.user.email);
+                localStorage.setItem('highScore', res.data.user.highScore);
+
             })
             .catch(err => dispatch(showAlert(err.message)))
     }
@@ -61,15 +62,16 @@ export function token(email) {
 }
 
 export function logout() {
+    localStorage.removeItem('currenUser');
+    localStorage.removeItem('highScore');
+    deleteCookie('token');
+    deleteCookie('refreshToken');
     return dispatch => {
         axios.get(`${SERVER}logout`)
             .then(res => {
                 dispatch({
                     type: LOGOUT_USER
                 });
-                deleteCookie('token');
-                deleteCookie('refreshToken');
-                localStorage.removeItem('currenUser', res.data.user);
             })
             .catch(err => dispatch(showAlert(err.message)))
     }
