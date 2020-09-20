@@ -23,9 +23,9 @@ function App() {
   useEffect(() => {
     dispatch(token(currentUser.email));
   }, []);
-  if(isAuth){
-  setInterval(dispatch(token(currentUser.email)), 10000);
-  }
+  // if(isAuth){
+  // setInterval(dispatch(token(currentUser.email)), 10000);
+  // }
 
   return (
     <div className="app">

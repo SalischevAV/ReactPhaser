@@ -35,6 +35,7 @@ export function login(email, password) {
                 })
                 setCookie('token', res.data.token);
                 setCookie('refreshToken', res.data.refreshToken);
+                localStorage.setItem('currenUser', res.data.user);
             })
             .catch(err => dispatch(showAlert(err.message)))
     }
@@ -68,6 +69,7 @@ export function logout() {
                 });
                 deleteCookie('token');
                 deleteCookie('refreshToken');
+                localStorage.removeItem('currenUser', res.data.user);
             })
             .catch(err => dispatch(showAlert(err.message)))
     }
