@@ -15,7 +15,13 @@ const config = {
   parent: "phaser-example",
   width: 800,
   height: 600,
-  backgroundColor: '#bfcc00'
+  backgroundColor: '#bfcc00',
+  physics: {
+    default: 'arcade',
+    arcade: {
+        debug: false
+    }
+  }
 };
 
 export const game = new Phaser.Game(config);

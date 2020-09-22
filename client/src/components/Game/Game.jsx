@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React from "react";
 import { IonPhaser } from "@ion-phaser/react";
 import {game} from '../../game';
 
@@ -7,12 +7,14 @@ function Game(){
   return (
     <div className="game">
 
-      {/* <IonPhaser game={game} /> */}
+      <IonPhaser game={game} />
     </div>
   );
 };
 
-export default Game;
+ export default Game;
+
+
 
 
 // const game = {
