@@ -1,12 +1,12 @@
 const passport = require('passport');
-const localStrtegy = require('passport-local').Strategy;
+const localStrategy = require('passport-local').Strategy;
 const JWTStrategy = require('passport-jwt').Strategy;
 const GameUser = require('../model/GameUser');
 const bcrypt = require('bcrypt');
 const config = require('config');
 
 
-passport.use('signup', new localStrtegy({
+passport.use('signup', new localStrategy({
     usernameField: 'email',
     passwordField: 'password',
     passReqToCallback: true
@@ -21,7 +21,7 @@ passport.use('signup', new localStrtegy({
     }
 }))
 
-passport.use('login', new localStrtegy({
+passport.use('login', new localStrategy({
     usernameField: 'email',
     passwordField: 'password'
 }, async (email, password, done) => {

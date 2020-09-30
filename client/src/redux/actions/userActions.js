@@ -2,9 +2,8 @@ import { LOGIN_USER, LOGOUT_USER } from '../types';
 import axios from 'axios';
 import SERVER from '../SERVER';
 import { showAlert } from './appActions';
-import setCookie from '../../utils/setCookie';
-import {getCookie,deleteCookie}  from '../../utils/getCookie';
-import regeneratorRuntime from "regenerator-runtime";
+import {getCookie,deleteCookie, setCookie}  from '../../utils/getCookie';
+
 
 
 export function registraion(email, password, name) {

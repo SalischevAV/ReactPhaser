@@ -7,7 +7,7 @@ import {
   Redirect,
 } from "react-router-dom";
 
-import Game from "../Game/Game.jsx";
+import GameTable from "../GameTable/GameTable.jsx";
 import Authorization from "../auth/Authorization.jsx";
 import Registration from "../auth/Registration.jsx";
 import Navbar from "../navbar/Navbar.jsx";
@@ -23,9 +23,7 @@ function App() {
   useEffect(() => {
     dispatch(token(currentUser.email));
   }, []);
-  // if(isAuth){
-  // setInterval(dispatch(token(currentUser.email)), 10000);
-  // }
+ 
 
   return (
     <div className="app">
@@ -41,7 +39,7 @@ function App() {
           </Switch>
         ) : (
           <Switch>
-            <Route exact path="/" component={Game} />
+            <Route exact path="/" component={GameTable} />
             <Redirect to="/" />
           </Switch>
         )}

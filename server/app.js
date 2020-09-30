@@ -14,8 +14,9 @@ const app = express();
 app.use(cors);
 app.use(express.json());
 app.use(cookieParser());
-require('./auth/auth');
+app.use(express.static(__dirname + "/public"));
 
+require('./auth/auth');
 app.use('/api', mainRouter);
 // app.use('/api', secureRouter);
 app.use('/api', passport.authenticate('jwt', {session:false}), secureRouter);

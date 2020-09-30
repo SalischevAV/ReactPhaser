@@ -1,5 +1,4 @@
 import { SHOW_ALERT, HIDE_ALERT, SHOW_LOADER, HIDE_LOADER } from '../types';
-import regeneratorRuntime from "regenerator-runtime";
 
 export function hideAlert(){
     return{
