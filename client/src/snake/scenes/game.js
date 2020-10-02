@@ -9,26 +9,8 @@ import body from '../../assets/img/player.png';
 import Food from '../objects/food';
 import Snake from '../objects/snake';
 
-// class Food extends Phaser.GameObjects.Image {
-//   constructor (scene, x, y, size) {
-//     super(scene, x * size + size / 2, y * size + size / 2, 'food');
-//   }
-// }
+import Phaser from 'phaser';
 
-// class Snake{
-//   constructor (scene, x, y, size) {
-//     this.headPosition = new Phaser.Geom.Point(x, y);
-//     this.body = scene.add.group();
-//     this.head = this.body.create(x * size, y * size, 'body');
-//     this.head.setOrigin(0);
-//     this.alive = true;
-//     this.speed = 100;
-//     this.moveTime = 0;
-//     this.tail = new Phaser.Geom.Point(x, y);
-//     this.heading = RIGHT;
-//     this.direction = RIGHT;
-//   }
-// }
 
 export default class SnakeScene extends Phaser.Scene {
   constructor() {
@@ -37,29 +19,48 @@ export default class SnakeScene extends Phaser.Scene {
     }); 
     this.size = 24;
     this.total = 0; 
+    this.scoreText;
   }
 
   
 
   preload() {
-    console.log('qwe')
     this.load.image('food', food);
     this.load.image('body', body);
   }
 
   create() {
+    console.log('GAME')
     this.food = new Food(this, 3, 4, this.size);
     this.children.add(this.food);
     this.snake = new Snake(this, 8, 8, this.size);
-    console.log(this.snake)
     this.cursors = this.input.keyboard.createCursorKeys();
+    this.scoreText = this.add.text(16,16, 'Score: 0', {fontSize: '32px', fill: '#fff'});
+    this.timeText = this.add.text(650, 16, 'Timer:', {fontSize: '32px', fill: '#fff'});
+    this.delay = 30000;
+    this.counter = this.delay/1000;
+    
+    
+
+    // this.time.delayedCall(2000, ()=>console.log(this.snake)); 
+    this.time.delayedCall(this.delay, this.endGame.bind(this)); 
+
+    this.time.addEvent({
+      delay: 1000,               
+      callback: ()=>{
+        this.counter--;
+        this.timeText.setText( 'Timer:' + this.counter)
+      },
+      loop: true
+  });
+
 
     this.input.on('pointerdown', () => {
       if (!this.snake.alive) {
         this.reset();
         this.game.events.emit(RESET_SCORE);
         this.game.events.emit(GAME_START);
-      }
+      } 
     });
   }
 
@@ -72,7 +73,8 @@ export default class SnakeScene extends Phaser.Scene {
   }
 
   eat() {
-    this.total = this.total + 1;
+    this.total = this.total + 10;
+    this.scoreText.setText('Score: ' + this.total);
   }
 
   snakeUpdate(time) {
@@ -82,7 +84,7 @@ export default class SnakeScene extends Phaser.Scene {
   }
 
   grow() {
-    var newPart = this.snake.body.create(this.snake.tail.x, this.snake.tail.y, 'body');
+    var newPart = this.snake.body.create(this.snake.tail.x, this.snake.tail.y, 'body'); 
     newPart.setOrigin(0);
   }
 
@@ -162,12 +164,18 @@ export default class SnakeScene extends Phaser.Scene {
     //  Update the body segments and place the last coordinate into this.tail
     Phaser.Actions.ShiftPosition(this.snake.body.getChildren(), this.snake.headPosition.x * this.size, this.snake.headPosition.y * this.size, 1, this.snake.tail);
 
+    if(this.total > 19){
+      this.winGame();
+    }
+
     var hitBody = Phaser.Actions.GetFirst(this.snake.body.getChildren(), { x: this.snake.head.x, y: this.snake.head.y }, 1);
     if (hitBody) {
-      console.log('dead');
-      this.snake.alive = false;
-      this.game.events.emit(GAME_END);
-      return false;
+      // this.snake.alive = false;
+      // this.scene.stop('SnakeScene');
+      // this.scene.switch('GameOver');
+      // // this.game.events.emit(GAME_END);
+      // return false;
+      this.endGame();
     }
     else {
       //  Update the timer ready for the next movement
@@ -175,6 +183,26 @@ export default class SnakeScene extends Phaser.Scene {
       return true;
     }
   }
+
+  endGame(){
+      this.snake.alive = false;
+      this.scene.stop('SnakeScene');
+      this.reset();
+      console.log(this.total);
+      this.scene.switch('GameOver');
+      // this.game.events.emit(GAME_END);
+      return false;
+  }
+
+  winGame(){
+    this.snake.alive = false;
+    this.scene.stop('SnakeScene');
+    this.reset();
+    console.log(this.total);
+    this.scene.switch('GameWin');
+    // this.game.events.emit(GAME_END);
+    return false;
+}
 
   update(time, delta){
     if (this.cursors.left.isDown) {
