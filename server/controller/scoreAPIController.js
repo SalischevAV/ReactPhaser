@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 module.exports.submitScore = async (req, res) => {
     try {
         const user = req.user;
-        console.log(user)
+        console.log(user)       
         if(!user){
             return res.status(401).json({message:'Unauthorized access'});
         }

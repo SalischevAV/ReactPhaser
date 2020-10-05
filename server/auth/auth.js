@@ -41,12 +41,13 @@ passport.use('login', new localStrategy({
     }
 }))
 
-passport.use(new JWTStrategy({
+passport.use('token', new JWTStrategy({
     secretOrKey: config.get('secretKey'),
     jwtFromRequest: (req)=>{
         let token = null;
         if(req && req.cookies){
-            token = req.cookies['jwt'];
+            token = req.cookies['token'];
+            console.log(token)
         }
         return token;
     }

@@ -2,9 +2,6 @@ const express = require('express');
 const router = express.Router();
 const  userAPIControllerWithPassport = require('../controller/userAPIControllerWithPassport')
 const passport = require('passport');
-const jwt = require('jsonwebtoken');
-const tokenList = {};
-
 
 router.get('/status', (req, res, next) => {
     res.status(200).json({ 'status': 'ok' });

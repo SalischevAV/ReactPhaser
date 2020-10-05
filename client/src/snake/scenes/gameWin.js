@@ -1,12 +1,17 @@
+import SnakeScene from './game';
+
 export default class GameWin extends Phaser.Scene {
 
     constructor() {
         super({ key: 'GameWin' });
     }
 
-    create(/* data */) {
+    init(props){
+        const level  = props; 
+        this.currentLevel = level;  
+      }
 
-        console.log('GAME WIN')
+    create(/* data */) {
         const x = this.cameras.main.width / 2;
         const y = this.cameras.main.height / 2;
 
@@ -42,13 +47,13 @@ export default class GameWin extends Phaser.Scene {
         startButton.setInteractive()
         .once('pointerup', () => {
             this.scene.sleep('GameWin');
-            this.scene.start('SnakeScene');
+            this.scene.start('SnakeScene', {level:1});
         });
 
         newLevelButton.setInteractive()
         .once('pointerup', () => {
             this.scene.sleep('GameWin');
-            this.scene.start('SnakeScene');
+            this.scene.start('SnakeScene',  this.currentLevel);
         });
 
         this.add.text(x, y + 300, 'HIGH SCORE')

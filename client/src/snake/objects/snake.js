@@ -6,13 +6,13 @@ const RIGHT = 3;
 
 
 class Snake{
-    constructor (scene, x, y, size) {
+    constructor (scene, x, y, size, speed) {
       this.headPosition = new Phaser.Geom.Point(x, y);
       this.body = scene.add.group();
       this.head = this.body.create(x * size, y * size, 'body');
       this.head.setOrigin(0);
       this.alive = true;
-      this.speed = 100;
+      this.speed = speed;
       this.moveTime = 0;
       this.tail = new Phaser.Geom.Point(x, y);
       this.heading = RIGHT;

@@ -1,0 +1,1 @@
+export const GAME_END = 'GAME_END'

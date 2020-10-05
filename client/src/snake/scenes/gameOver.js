@@ -5,8 +5,6 @@ export default class GameOver extends Phaser.Scene {
   }
 
   create(/* data */) {
-
-    console.log('GAME OVER')
     const x = this.cameras.main.width / 2;
     const y = this.cameras.main.height / 2;
 

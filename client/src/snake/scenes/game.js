@@ -8,21 +8,26 @@ import body from '../../assets/img/player.png';
 
 import Food from '../objects/food';
 import Snake from '../objects/snake';
+import { GAME_END } from '../types';
 
 import Phaser from 'phaser';
 
 
 export default class SnakeScene extends Phaser.Scene {
-  constructor() {
+  constructor(currentLevel=1) {
     super({
       key: 'SnakeScene',
     }); 
     this.size = 24;
     this.total = 0; 
     this.scoreText;
+    this.currentLevelText;
   }
 
-  
+  init(props){
+    const { level = 1 } = props; 
+    this.currentLevel = level; 
+  }
 
   preload() {
     this.load.image('food', food);
@@ -30,19 +35,17 @@ export default class SnakeScene extends Phaser.Scene {
   }
 
   create() {
-    console.log('GAME')
     this.food = new Food(this, 3, 4, this.size);
     this.children.add(this.food);
-    this.snake = new Snake(this, 8, 8, this.size);
+    this.snake = new Snake(this, 8, 8, this.size, 400/this.currentLevel);
     this.cursors = this.input.keyboard.createCursorKeys();
     this.scoreText = this.add.text(16,16, 'Score: 0', {fontSize: '32px', fill: '#fff'});
     this.timeText = this.add.text(650, 16, 'Timer:', {fontSize: '32px', fill: '#fff'});
+    this.currentLevelText = this.add.text(650, 45, 'Level:' + this.currentLevel, {fontSize: '32px', fill: '#fff'}); 
     this.delay = 30000;
     this.counter = this.delay/1000;
     
     
-
-    // this.time.delayedCall(2000, ()=>console.log(this.snake)); 
     this.time.delayedCall(this.delay, this.endGame.bind(this)); 
 
     this.time.addEvent({
@@ -54,14 +57,6 @@ export default class SnakeScene extends Phaser.Scene {
       loop: true
   });
 
-
-    this.input.on('pointerdown', () => {
-      if (!this.snake.alive) {
-        this.reset();
-        this.game.events.emit(RESET_SCORE);
-        this.game.events.emit(GAME_START);
-      } 
-    });
   }
 
   reset() {
@@ -93,12 +88,6 @@ export default class SnakeScene extends Phaser.Scene {
       && food.y - this.size <= this.snake.head.y && this.snake.head.y <= food.y) {
       this.grow();
       this.eat();
-      //  For every 5 items of food eaten we'll increase the snake speed a little
-      if (this.snake.speed > 20 && this.total % 5 === 0) {
-        this.snake.speed -= 5;
-      }
-
-      // this.game.events.emit(INCREASE_SCORE, this.total);
       return true;
     }
     else {
@@ -107,7 +96,6 @@ export default class SnakeScene extends Phaser.Scene {
   }
 
   updateGrid(grid) {
-    //  Remove all body pieces from valid positions list
     this.snake.body.children.each((segment) => {
       var bx = segment.x / this.size;
       var by = segment.y / this.size;
@@ -164,17 +152,12 @@ export default class SnakeScene extends Phaser.Scene {
     //  Update the body segments and place the last coordinate into this.tail
     Phaser.Actions.ShiftPosition(this.snake.body.getChildren(), this.snake.headPosition.x * this.size, this.snake.headPosition.y * this.size, 1, this.snake.tail);
 
-    if(this.total > 19){
+    if(this.total > this.currentLevel*10-1){
       this.winGame();
     }
 
     var hitBody = Phaser.Actions.GetFirst(this.snake.body.getChildren(), { x: this.snake.head.x, y: this.snake.head.y }, 1);
     if (hitBody) {
-      // this.snake.alive = false;
-      // this.scene.stop('SnakeScene');
-      // this.scene.switch('GameOver');
-      // // this.game.events.emit(GAME_END);
-      // return false;
       this.endGame();
     }
     else {
@@ -187,21 +170,22 @@ export default class SnakeScene extends Phaser.Scene {
   endGame(){
       this.snake.alive = false;
       this.scene.stop('SnakeScene');
+      this.game.events.emit(GAME_END , {score: this.total}); 
       this.reset();
-      console.log(this.total);
+      this.currentLevel = 1;
       this.scene.switch('GameOver');
-      // this.game.events.emit(GAME_END);
       return false;
   }
 
   winGame(){
     this.snake.alive = false;
     this.scene.stop('SnakeScene');
+    this.game.events.emit(GAME_END , {score: this.total});
     this.reset();
-    console.log(this.total);
-    this.scene.switch('GameWin');
-    // this.game.events.emit(GAME_END);
-    return false;
+    this.currentLevel += 1;
+    // this.scene.sleep('SnakeScene');
+    this.scene.start('GameWin',{level:this.currentLevel});
+    return false; 
 }
 
   update(time, delta){
@@ -219,7 +203,6 @@ export default class SnakeScene extends Phaser.Scene {
     }
 
     if (this.snakeUpdate(time)) {
-      //  If the snake updated, we need to check for collision against food
       if (this.collideWithFood(this.food)) {
         this.repositionFood();
       }
@@ -227,37 +210,29 @@ export default class SnakeScene extends Phaser.Scene {
   }
 
   repositionFood() {
-    //  First create an array that assumes all positions
-    //  are valid for the new piece of food
-
-    //  A Grid we'll use to reposition the food each time it's eaten
     let testGrid = [];
 
     for (var y = 0; y < 30; y++) {
       testGrid[y] = [];
 
       for (var x = 0; x < 40; x++) {
-        // @ts-ignore
         testGrid[y][x] = true;
       }
     }
 
     this.updateGrid(testGrid);
 
-    //  Purge out false positions
     let validLocations = [];
 
     for (let y = 0; y < 30; y++) {
       for (let x = 0; x < 40; x++) {
         if (testGrid[y][x] === true) {
-          //  Is this position valid for food? If so, add it here ...
           validLocations.push({ x: x, y: y });
         }
       }
     }
 
     if (validLocations.length > 0) {
-      //  Pick a random food position
       const pos = Phaser.Math.RND.pick(validLocations);
       this.food.setPosition(pos.x * this.size + this.size / 2, pos.y * this.size + this.size / 2);
       return true;

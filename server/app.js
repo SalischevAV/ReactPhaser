@@ -7,6 +7,7 @@ const mainRouter = require('./routes/main');
 const secureRouter = require('./routes/secure');
 const passport = require('passport');
 const cookieParser = require('cookie-parser');
+const authToken = require('./middleware/authToken');
 
 
 const app = express();
@@ -18,8 +19,8 @@ app.use(express.static(__dirname + "/public"));
 
 require('./auth/auth');
 app.use('/api', mainRouter);
-// app.use('/api', secureRouter);
-app.use('/api', passport.authenticate('jwt', {session:false}), secureRouter);
+// app.use('/api', authToken, secureRouter);
+app.use('/api', passport.authenticate('token', {session:false}), secureRouter);
 
 app.use((req, res, next)=>{
     res.status(404).json({message: '404 - Notfound'});

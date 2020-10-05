@@ -1,4 +1,4 @@
-import { LOGIN_USER, LOGOUT_USER } from '../types';
+import { LOGIN_USER, LOGOUT_USER, SET_SCORE, GET_SCORE } from '../types';
 
 const initialState = {
     currentUser: {},

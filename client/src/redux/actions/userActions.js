@@ -1,4 +1,4 @@
-import { LOGIN_USER, LOGOUT_USER } from '../types';
+import { LOGIN_USER, LOGOUT_USER, SET_SCORE, GET_SCORE } from '../types';
 import axios from 'axios';
 import SERVER from '../SERVER';
 import { showAlert } from './appActions';
@@ -43,20 +43,21 @@ export function login(email, password) {
 
 export function token(email) {
     return dispatch => {
-        const refreshToken = getCookie('refreshToken')
+        const refreshToken = getCookie('refreshToken');
         axios
             .post(`${SERVER}token`, {
                 email,
                 refreshToken
             })
             .then(res => {
-                dispatch({
-                    type: LOGIN_USER,
-                    payload: res.data.user
-                })
                 setCookie('token', res.data.token);
             })
-            .catch(err => dispatch(showAlert(err.message)))
+            .catch(err => {
+                dispatch(showAlert(err.message));
+                // dispatch({
+                //     type: LOGOUT_USER
+                // })
+            })
     }
 }
 
@@ -76,3 +77,21 @@ export function logout() {
     }
 }
 
+export function setScore(score){
+    const token = getCookie('token');
+    return  dispatch =>{
+        try{
+           axios
+           .post(`${SERVER}submit-score`,score, {
+                headers: { cookie : `token=${token}`}
+            })
+            .then(res => console.log(res))
+
+            
+        }
+        catch(err) {
+            console.log(err) 
+            dispatch(showAlert(err.message))
+        }
+    }
+}
