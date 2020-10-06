@@ -27,7 +27,6 @@ module.exports.login = async (req, res, next) => {
                     email: user.email
                 };
                 const token = jwt.sign({user: body}, config.get('secretKey'), {expiresIn: 300});
-                console.log(token)
                 const refreshToken = jwt.sign({user: body}, config.get('refreshKey'), {expiresIn: 86400});
 
                 res.cookie('jwt', token);

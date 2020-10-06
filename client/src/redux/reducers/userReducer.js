@@ -19,6 +19,11 @@ const userReducer = (state = initialState, action) => {
                 currentUser: {},
                 isAuth: false
             }
+        case SET_SCORE:
+            return{
+                ...state,
+                currentUser:{...state.currentUser, highScore: action.payload}
+            }
         default: return state;
     }
 }

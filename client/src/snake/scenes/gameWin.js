@@ -56,10 +56,7 @@ export default class GameWin extends Phaser.Scene {
             this.scene.start('SnakeScene',  this.currentLevel);
         });
 
-        this.add.text(x, y + 300, 'HIGH SCORE')
-            .setOrigin(0.5, 1);
-
-        this.add.text(x, y + 299, `POINTS`)
+        this.add.text(x, y + 299, `RAITING`)
             .setOrigin(0.5, 0);
     }
 }

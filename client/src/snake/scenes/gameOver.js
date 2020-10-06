@@ -4,6 +4,9 @@ export default class GameOver extends Phaser.Scene {
     super({ key: 'GameOver' });
   }
 
+  init(){
+    this.highScore = localStorage.getItem('highScore');
+  }
   create(/* data */) {
     const x = this.cameras.main.width / 2;
     const y = this.cameras.main.height / 2;
@@ -30,10 +33,7 @@ export default class GameOver extends Phaser.Scene {
         this.scene.start('SnakeScene');
       });
 
-    this.add.text(x, y + 300, 'HIGH SCORE')
-      .setOrigin(0.5, 1);
-
-    this.add.text(x, y + 299, `POINTS`)
+    this.add.text(x, y + 299, `RAITING`)
       .setOrigin(0.5, 0);
   }
 }

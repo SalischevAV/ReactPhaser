@@ -41,13 +41,13 @@ passport.use('login', new localStrategy({
     }
 }))
 
+
 passport.use('token', new JWTStrategy({
     secretOrKey: config.get('secretKey'),
     jwtFromRequest: (req)=>{
         let token = null;
-        if(req && req.cookies){
-            token = req.cookies['token'];
-            console.log(token)
+        if(req && req.body){
+            token = req.body['token'];        
         }
         return token;
     }
@@ -58,3 +58,24 @@ passport.use('token', new JWTStrategy({
         done(err);
     }
 }))
+
+// passport.use('token', new JWTStrategy({
+//     secretOrKey: config.get('secretKey'),
+//     jwtFromRequest: (req)=>{
+//         let token = null;
+//         if(req && req.cookies){
+//             console.log('passport token: ', req.cookies)
+//             token = req.cookies['token'];
+//             //  console.log('passport token: ', token)
+//         }
+//         return token;
+//     }
+// }, async (token, done)=>{
+//     try{
+//         return done(null, token.user);
+//     }catch(err){
+//         done(err);
+//     }
+// }))
+
+

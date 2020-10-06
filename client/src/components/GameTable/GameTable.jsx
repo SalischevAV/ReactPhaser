@@ -25,10 +25,15 @@ function GameTable() {
 
   const game = new Phaser.Game(config);
   game.scene.start(Menu); 
-  game.events.on(GAME_END, data =>dispatch(setScore(data))); 
+  game.events.on(GAME_END, data =>{
+    let scores = localStorage.getItem('highScore');
+    if (scores < data.score) {
+    dispatch(setScore(data));
+    }
+  }); 
   
-  // const tokenTimer = setInterval(() => dispatch(token(currentUser.email)),
-  // 10000);
+  const tokenTimer = setInterval(() => dispatch(token(currentUser.email)),
+  10000);
 
   useEffect(()=>{
     return(()=>{

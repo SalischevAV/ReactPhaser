@@ -1,25 +1,23 @@
 const express = require('express');
 const config = require ('config');
 const mongoose = require('mongoose');
-const cors = require('./middleware/cors');
+// const cors = require('./middleware/cors');
 const PORT =config.get('serverPort');
 const mainRouter = require('./routes/main');
 const secureRouter = require('./routes/secure');
 const passport = require('passport');
 const cookieParser = require('cookie-parser');
-const authToken = require('./middleware/authToken');
+const cors = require('cors')
+// const authToken = require('../backup/authToken');
 
 
 const app = express();
-
-app.use(cors);
+app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
-app.use(express.static(__dirname + "/public"));
 
 require('./auth/auth');
 app.use('/api', mainRouter);
-// app.use('/api', authToken, secureRouter);
 app.use('/api', passport.authenticate('token', {session:false}), secureRouter);
 
 app.use((req, res, next)=>{
@@ -35,7 +33,8 @@ async function start(){
         await mongoose.connect(config.get('dbUrl'),
         {
             useNewUrlParser: true,
-            useUnifiedTopology: true
+            useUnifiedTopology: true,
+            useFindAndModify: false
         },()=>{
             console.log('Mongoose connect to db: '+ config.get('dbName'));
         });

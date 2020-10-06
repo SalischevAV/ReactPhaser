@@ -2,7 +2,7 @@ import { LOGIN_USER, LOGOUT_USER, SET_SCORE, GET_SCORE } from '../types';
 import axios from 'axios';
 import SERVER from '../SERVER';
 import { showAlert } from './appActions';
-import {getCookie,deleteCookie, setCookie}  from '../../utils/getCookie';
+import { getCookie, deleteCookie, setCookie } from '../../utils/getCookie';
 
 
 
@@ -72,26 +72,37 @@ export function logout() {
                 dispatch({
                     type: LOGOUT_USER
                 });
+                localStorage.clear();
             })
             .catch(err => dispatch(showAlert(err.message)))
     }
 }
 
-export function setScore(score){
+export function setScore({score}) {
     const token = getCookie('token');
-    return  dispatch =>{
-        try{
-           axios
-           .post(`${SERVER}submit-score`,score, {
-                headers: { cookie : `token=${token}`}
-            })
-            .then(res => console.log(res))
 
-            
+    return dispatch => {
+        try {
+            axios
+                .post(`${SERVER}submit-score`, {
+                    score,
+                    token
+                })
+                .then(res => {
+                    localStorage.setItem('highScore', res.data.highScore);
+                    // dispatch({
+                    //     type: SET_SCORE,
+                    //     payload: res.data.highScore
+                    // })
+                })
+
+
         }
-        catch(err) {
-            console.log(err) 
+        catch (err) {
+            console.log(err)
             dispatch(showAlert(err.message))
         }
     }
 }
+
+
