@@ -46,8 +46,8 @@ passport.use('token', new JWTStrategy({
     secretOrKey: config.get('secretKey'),
     jwtFromRequest: (req)=>{
         let token = null;
-        if(req && req.body){
-            token = req.body['token'];        
+        if(req && req.headers){
+            token = req.headers.authorization.split(' ')[1];
         }
         return token;
     }
@@ -57,16 +57,16 @@ passport.use('token', new JWTStrategy({
     }catch(err){
         done(err);
     }
-}))
+}));
+
 
 // passport.use('token', new JWTStrategy({
 //     secretOrKey: config.get('secretKey'),
 //     jwtFromRequest: (req)=>{
+//         console.log(req.headers)
 //         let token = null;
-//         if(req && req.cookies){
-//             console.log('passport token: ', req.cookies)
-//             token = req.cookies['token'];
-//             //  console.log('passport token: ', token)
+//         if(req && req.body){
+//             token = req.body['token'];        
 //         }
 //         return token;
 //     }
@@ -77,5 +77,4 @@ passport.use('token', new JWTStrategy({
 //         done(err);
 //     }
 // }))
-
 

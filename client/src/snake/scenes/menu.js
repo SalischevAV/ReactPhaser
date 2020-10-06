@@ -5,7 +5,6 @@ export default class Menu extends Phaser.Scene {
     }
     
     create(/* data */) {
-  
       const x = this.cameras.main.width / 2;
       const y = this.cameras.main.height / 2;
   
@@ -31,7 +30,13 @@ export default class Menu extends Phaser.Scene {
       });
 
 
-        this.add.text(x, y + 299, `RAITING`)
+        const raitingButton = this.add.text(x, y + 299, `RAITING`)
             .setOrigin(0.5, 0);
+
+            raitingButton.setInteractive()
+            .once('pointerup', () => {
+                this.scene.sleep('Menu');
+                this.scene.start('Raiting', {scene: 'Menu'});
+            });
     }
   }

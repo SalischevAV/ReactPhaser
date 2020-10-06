@@ -30,10 +30,16 @@ export default class GameOver extends Phaser.Scene {
     startButton.setInteractive()
       .once('pointerup', () => {
         this.scene.sleep('GameOver');
-        this.scene.start('SnakeScene');
+        this.scene.start('SnakeScene',  {level:1});
       });
 
-    this.add.text(x, y + 299, `RAITING`)
+      const raitingButton = this.add.text(x, y + 299, `RAITING`)
       .setOrigin(0.5, 0);
+
+      raitingButton.setInteractive()
+      .once('pointerup', () => {
+          this.scene.sleep('Menu');
+          this.scene.start('Raiting', {scene: 'GameOver'});
+      });
   }
 }

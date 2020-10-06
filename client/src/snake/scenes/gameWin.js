@@ -1,4 +1,3 @@
-import SnakeScene from './game';
 
 export default class GameWin extends Phaser.Scene {
 
@@ -56,7 +55,13 @@ export default class GameWin extends Phaser.Scene {
             this.scene.start('SnakeScene',  this.currentLevel);
         });
 
-        this.add.text(x, y + 299, `RAITING`)
+        const raitingButton = this.add.text(x, y + 299, `RAITING`)
             .setOrigin(0.5, 0);
+
+            raitingButton.setInteractive()
+            .once('pointerup', () => {
+                this.scene.sleep('Menu');
+                this.scene.start('Raiting', {scene: 'GameWin'});
+            });
     }
 }

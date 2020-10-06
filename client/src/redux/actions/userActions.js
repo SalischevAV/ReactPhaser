@@ -3,6 +3,7 @@ import axios from 'axios';
 import SERVER from '../SERVER';
 import { showAlert } from './appActions';
 import { getCookie, deleteCookie, setCookie } from '../../utils/getCookie';
+// import Authorization from './../../components/auth/Authorization';
 
 
 
@@ -79,14 +80,11 @@ export function logout() {
 }
 
 export function setScore({score}) {
-    const token = getCookie('token');
-
     return dispatch => {
         try {
             axios
-                .post(`${SERVER}submit-score`, {
-                    score,
-                    token
+                .post(`${SERVER}submit-score`, score, {
+                    headers: { Authorization: `Bearer ${getCookie('token')}` }
                 })
                 .then(res => {
                     localStorage.setItem('highScore', res.data.highScore);
@@ -105,4 +103,25 @@ export function setScore({score}) {
     }
 }
 
+export function getRaiting() {
+    return dispatch => {
+        try {
+            axios
+                .get(`${SERVER}scores`, {
+                    headers: { Authorization: `Bearer ${getCookie('token')}` }
+                })
+                .then(res => {
+                    console.log(res.data)
+                    // localStorage.setItem('highScore', res.data.highScore);
+                    
+                })
+
+
+        }
+        catch (err) {
+            console.log(err)
+            dispatch(showAlert(err.message))
+        }
+    }
+}
 

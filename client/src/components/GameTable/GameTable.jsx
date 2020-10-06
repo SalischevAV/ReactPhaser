@@ -5,8 +5,9 @@ import SnakeScene from '../../snake/scenes/game';
 import Menu from '../../snake/scenes/menu';
 import GameOver from '../../snake/scenes/gameOver';
 import GameWin from '../../snake/scenes/gameWin';
+import Raiting from '../../snake/scenes/raiting';
 import { GAME_END } from '../../snake/types';
-import {setScore, token} from '../../redux/actions/userActions';
+import {setScore, token, getRaiting} from '../../redux/actions/userActions';
 import './style.css'
 
 const config = {
@@ -15,7 +16,7 @@ const config = {
   height: 720,
   backgroundColor: '#bfcc00',
   parent: 'game',
-   scene: [ Menu, SnakeScene, GameOver, GameWin]
+   scene: [Menu, SnakeScene, GameOver, GameWin,  Raiting] 
 }
 
 
@@ -24,7 +25,8 @@ function GameTable() {
   const currentUser = useSelector(state => state.user.currentUser);
 
   const game = new Phaser.Game(config);
-  game.scene.start(Menu); 
+  game.scene.start(Menu);
+
   game.events.on(GAME_END, data =>{
     let scores = localStorage.getItem('highScore');
     if (scores < data.score) {
@@ -33,7 +35,7 @@ function GameTable() {
   }); 
   
   const tokenTimer = setInterval(() => dispatch(token(currentUser.email)),
-  10000);
+  240000);
 
   useEffect(()=>{
     return(()=>{
@@ -44,7 +46,7 @@ function GameTable() {
 
   return (
     <div className="game" id='game'>
-     
+    
     </div>
   );
 }
