@@ -31,7 +31,7 @@ module.exports.scores = async (req, res) =>{
         if(!user){
             return res.status(401).json({message:'Unauthorized access'});
         }
-        const users = await GameUser.find({}).sort({highScore: -1}).limit(10);
+        const users = await GameUser.find({}).sort({highScore: -1}).limit(9);
         res.status(200).json(users);
 
     }catch(err){

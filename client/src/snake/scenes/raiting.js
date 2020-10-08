@@ -1,61 +1,46 @@
 import axios from 'axios';
 import SERVER from '../../redux/SERVER';
-import { getCookie} from '../../utils/getCookie';
+import { getCookie } from '../../utils/getCookie';
 export default class Raiting extends Phaser.Scene {
-   
-    constructor() {
-      super({key: 'Raiting'});
-      this.scores;
-    }
-    
-    init(props){
-        const scene  = props; 
-        this.returnScene = scene;  
-        this.getRaiting(); 
-        console.log(this.scores); 
-        // for(let i =0; i <this.scores.length; i++){
-        //   this.add.text(x , (y-200) + i*30 , `${this.scores[i]}`,  {fontSize: '32px', fill: '#aaa'}) 
-        // }
-        
-    }
 
-    getRaiting() {    
-          try {
-              axios
-                  .get(`${SERVER}scores`, {
-                      headers: { Authorization: `Bearer ${getCookie('token')}` }
-                  })
-                  .then(res => {
-                    console.log(res)
-                    this.scores = res.data                  
-                  }) 
-  
-          }
-          catch (err) {
-              console.log(err)
-            
-          }
-      
+  constructor() {
+    super({ key: 'Raiting' });
   }
 
-    create(/* data */) {
-  
-      const x = this.cameras.main.width / 2;
-      const y = this.cameras.main.height / 2;
-  
+  init(props) {
+    const scene = props;
+    this.returnScene = scene;
 
-      // for(let i =0; i <this.scores.length; i++){
-      //   this.add.text(x , (y-200) + i*30 , `${this.scores[i]}`,  {fontSize: '32px', fill: '#aaa'}) 
-      // }
-      
-      
-      const returnButton = this.add.text(x, y + 299, `Return`)
-            .setOrigin(0.5, 0);
-
-            returnButton.setInteractive()
-            .once('pointerup', () => {
-                this.scene.sleep('Raiting');
-                this.scene.start(this.returnScene.scene);
-            });
+    this.x = this.cameras.main.width / 2;
+    this.y = this.cameras.main.height / 2;
+    this.getRaiting(); 
   }
+
+  getRaiting() {
+    axios
+      .get(`${SERVER}scores`, {
+        headers: { Authorization: `Bearer ${getCookie('token')}`}
+      })
+      .then(res => {
+        const scores = res.data;
+        console.log(scores);
+        for(let i =0; i <scores.length; i++){
+           this.add.text(10 , (this.y-300) + i*50 , `${i+1}. max scores:${scores[i].highScore}, name:${scores[i].name}`,  {fontSize: '50px', fontWeight: 'bold', fill: '#fff'});
+        }       
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  }
+
+  create() {
+    const returnButton = this.add.text(this.x, this.y + 299, `Return`)
+      .setOrigin(0.5, 0);
+
+    returnButton.setInteractive()
+      .once('pointerup', () => {
+        this.scene.sleep('Raiting');
+        this.scene.start(this.returnScene.scene);
+      });  
+    }
 }

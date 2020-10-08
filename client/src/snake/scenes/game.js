@@ -161,7 +161,6 @@ export default class SnakeScene extends Phaser.Scene {
       this.endGame();
     }
     else {
-      //  Update the timer ready for the next movement
       this.snake.moveTime = time + this.snake.speed;
       return true;
     }
@@ -183,7 +182,6 @@ export default class SnakeScene extends Phaser.Scene {
     this.game.events.emit(GAME_END , {score: this.total});
     this.reset();
     this.currentLevel += 1;
-    // this.scene.sleep('SnakeScene');
     this.scene.start('GameWin',{level:this.currentLevel});
     return false; 
 }

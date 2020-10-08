@@ -10,7 +10,7 @@ export default class GameWin extends Phaser.Scene {
         this.currentLevel = level;  
       }
 
-    create(/* data */) {
+    create() {
         const x = this.cameras.main.width / 2;
         const y = this.cameras.main.height / 2;
 

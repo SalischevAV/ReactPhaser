@@ -7,7 +7,7 @@ export default class GameOver extends Phaser.Scene {
   init(){
     this.highScore = localStorage.getItem('highScore');
   }
-  create(/* data */) {
+  create() {
     const x = this.cameras.main.width / 2;
     const y = this.cameras.main.height / 2;
 
